@@ -1,14 +1,11 @@
 import math
-class normal_calculator:
-    self_mode = 0
-
+from tkinter import *
+class calculator:
 
     def __init__(self):
         self.expression = ""
+        self.mode = 0
 
-    def mode(self):
-        mode = 1
-        return mode
     def click(self, key, equation, expression):
         if key == "=":
             self.calculate(equation, expression)
@@ -39,68 +36,83 @@ class normal_calculator:
         self.expression = ""
         equation.set("")
 
-    def switch_mode(self):
+    def switch_mode(self, gui):
         if self.mode == 0:
             self.mode = 1
-            #self.switch_mode_label.config(text="Normal Mode")
-            #self.create_advanced_calculator()
         else:
             self.mode = 0
-            #self.switch_mode_label.config(text="Advanced Mode")
-            #self.create_normal_calculator()
-        return self.mode
+        gui.destroy()
+        self.gui()
 
-class advanced_calculator:
-    def __init__(self):
-        self.expression = ""
-
-    def mode(self):
-        mode = 0
-        return mode
-    def click(self, key, equation, expression):
-        if key == "=":
-            self.calculate(equation, expression)
-            return
-        self.expression += str(key)
-        equation.set(self.expression)
-
-    def power(self, value, power):
-        return value**power
-
-    def n_sqrt(self, value, n):
-        return value**(1/n)
-    def calculate(self, equation, expression):
-        try:
-            expression = expression.replace("ln", "math.log")
-            expression = expression.replace("e", "math.exp")
-            expression = expression.replace("x²", "**2")
-            expression = expression.replace("√", "**0.5")
-            expression = expression.replace("sin", "math.sin")
-            expression = expression.replace("cos", "math.cos")
-            expression = expression.replace("tan", "math.tan")
-            expression = expression.replace("arcsin", "math.asin")
-            expression = expression.replace("arccos", "math.acos")
-            expression = expression.replace("arctan", "math.atan")
-            total = eval(expression)
-            equation.set(total)
-            self.expression = str(total)
-        except:
-            equation.set("An error has been detected")
-            self.expression = ""
-
-        def mode(self):
-            self.mode = 0
-            return self.mode
-
-    def switch_mode(self):
+    def gui(self):
+        gui = Tk()
         if self.mode == 0:
-            self.mode = 1
-            #self.switch_mode_label.config(text="Normal Mode")
-            #self.create_advanced_calculator()
+            self.normal_calculator(gui)
+            gui.geometry("235x457")
         else:
-            self.mode = 0
-            #self.switch_mode_label.config(text="Advanced Mode")
-            #self.create_normal_calculator()
-        return self.mode
+            self.advanced_calculator(gui)
+            gui.geometry("300x590")
+        gui.configure(background="#101419")
+        gui.title("Py Calculator")
+        gui.mainloop()
+
+    def normal_calculator(self, gui):
+
+        equation = StringVar()
+        # Results
+        results = Label(gui, bg="#101419", fg="#FFF", textvariable=equation, height=2)
+        results.grid(columnspan=4)
+
+        # Buttons
+        buttons = [7, 8, 9, "+", 4, 5, 6, "-", 1, 2, 3, "*", 0, ".", "/", "="]
+        row = 1
+        column = 0
+        for i in buttons:
+            b = Label(gui, text=str(i), bg="#476C9B", fg="#FFF", height=4, width=6)
+            b.bind("<Button-1>", lambda e, i=i: self.click(i, equation, self.expression))
+            b.grid(row=row, column=column)
+            column += 1
+            if column == 4:
+                column = 0
+                row += 1
+
+        d = Label(gui, text="Delete", bg="#984447", fg="#FFF", height=4, width=26)
+        d.bind("<Button-1>", lambda e: self.delete(equation))
+        d.grid(columnspan=5)
+
+        c = 0
+        a = Label(gui, text="Advanced Mode", bg="#2ECC71", fg="#FFF", height=4, width=26)
+        a.grid(columnspan=5)
+        a.bind("<Button-1>", lambda e: self.switch_mode(gui))
+
+    def advanced_calculator(self, gui):
+        equation = StringVar()
+        results = Label(gui, bg="#101419", fg="#FFF", textvariable=equation, height=2)
+        results.grid(columnspan=4)
+
+        # Buttons
+        buttons = ["ln", 7, 8, 9, "+", "e", 4, 5, 6, "-", "²", 1, 2, 3, "*", "ᴺ", 0, ".", "/", "=", "√", "cos", "sin",
+                   "tan", "π", "ᴺ√", "arccos", "arcsin", "arctan", "10ᴺ"]
+        row = 1
+        column = 0
+        for i in buttons:
+            b = Label(gui, text=str(i), bg="#476C9B", fg="#FFF", height=4, width=6)
+            b.bind("<Button-1>", lambda e, i=i: self.click(i, equation, self.expression))
+            b.grid(row=row, column=column)
+            column += 1
+            if column == 5:
+                column = 0
+                row += 1
+
+        d = Label(gui, text="Delete", bg="#984447", fg="#FFF", height=4, width=32)
+        d.bind("<Button-1>", lambda e: self.delete(equation))
+        d.grid(columnspan=5)
+
+        a = Label(gui, text="Normal mode", bg="#2ECC71", fg="#FFF", height=4, width=32)
+        a.grid(columnspan=5)
+        a.bind("<Button-1>", lambda e: self.switch_mode(gui))
+
+
+
 
 
