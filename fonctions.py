@@ -17,7 +17,7 @@ class calculator:
         try:
             expression = expression.replace("ln", "math.log")
             expression = expression.replace("e", "math.exp")
-            expression = expression.replace("x²", "**2")
+            expression = expression.replace("²", "**2")
             expression = expression.replace("√", "**0.5")
             expression = expression.replace("sin", "math.sin")
             expression = expression.replace("cos", "math.cos")
@@ -25,12 +25,13 @@ class calculator:
             expression = expression.replace("arcsin", "math.asin")
             expression = expression.replace("arccos", "math.acos")
             expression = expression.replace("arctan", "math.atan")
-            total = str(eval(self.expression))
+            expression = expression.replace("π", "math.pi")
+            total = str(eval(expression, {"__builtins__": None}, {"math": math}))
             equation.set(total)
-            self.expression = total
+            expression = total
         except:
             equation.set("An error has been detected")
-            self.expression = ""
+            expression = ""
 
     def delete(self, equation):
         self.expression = ""
@@ -92,7 +93,7 @@ class calculator:
 
         # Buttons
         buttons = ["ln", 7, 8, 9, "+", "e", 4, 5, 6, "-", "²", 1, 2, 3, "*", "ᴺ", 0, ".", "/", "=", "√", "cos", "sin",
-                   "tan", "π", "ᴺ√", "arccos", "arcsin", "arctan", "10ᴺ"]
+                   "tan", "π", "(", "arccos", "arcsin", "arctan", ")"]
         row = 1
         column = 0
         for i in buttons:
