@@ -26,9 +26,13 @@ class calculator:
             expression = expression.replace("arccos", "math.acos")
             expression = expression.replace("arctan", "math.atan")
             expression = expression.replace("π", "math.pi")
+            if "ᴺ" in expression:
+                power = int(input())
+                expression = expression.replace("ᴺ", f"**{power}")
             total = str(eval(expression, {"__builtins__": None}, {"math": math}))
             equation.set(total)
             expression = total
+
         except:
             equation.set("An error has been detected")
             expression = ""
@@ -36,6 +40,14 @@ class calculator:
     def delete(self, equation):
         self.expression = ""
         equation.set("")
+
+    def radian(self, equation):
+        try:
+            angle = float(equation.get())
+            radian = math.radians(angle)
+            return equation.set(str(radian))
+        except ValueError:
+            equation.set("Invalid input. Please enter a numeric value for the angle.")
 
     def switch_mode(self, gui):
         if self.mode == 0:
@@ -52,7 +64,7 @@ class calculator:
             gui.geometry("235x457")
         else:
             self.advanced_calculator(gui)
-            gui.geometry("300x590")
+            gui.geometry("300x670")
         gui.configure(background="#101419")
         gui.title("Py Calculator")
         gui.mainloop()
@@ -92,7 +104,7 @@ class calculator:
         results.grid(columnspan=4)
 
         # Buttons
-        buttons = ["ln", 7, 8, 9, "+", "e", 4, 5, 6, "-", "²", 1, 2, 3, "*", "ᴺ", 0, ".", "/", "=", "√", "cos", "sin",
+        buttons = ["ln", 7, 8, 9, "+", "e", 4, 5, 6, "-", "²", 1, 2, 3, "*", "√", 0, ".", "/", "=", "ᴺ", "cos", "sin",
                    "tan", "π", "(", "arccos", "arcsin", "arctan", ")"]
         row = 1
         column = 0
@@ -105,6 +117,11 @@ class calculator:
                 column = 0
                 row += 1
 
+        r = Label(gui, text="Radian", bg="#FFC0CB", fg="#FFF", height=4, width=32)
+        r.bind("<Button-1>", lambda e: self.radian(equation))
+        r.grid(columnspan=5)
+
+
         d = Label(gui, text="Delete", bg="#984447", fg="#FFF", height=4, width=32)
         d.bind("<Button-1>", lambda e: self.delete(equation))
         d.grid(columnspan=5)
@@ -112,6 +129,11 @@ class calculator:
         a = Label(gui, text="Normal mode", bg="#2ECC71", fg="#FFF", height=4, width=32)
         a.grid(columnspan=5)
         a.bind("<Button-1>", lambda e: self.switch_mode(gui))
+
+
+
+
+
 
 
 
