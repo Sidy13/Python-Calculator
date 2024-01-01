@@ -18,7 +18,7 @@ class calculator:
             expression = expression.replace("ln", "math.log")
             expression = expression.replace("e", "math.exp")
             expression = expression.replace("²", "**2")
-            expression = expression.replace("√", "**0.5")
+            expression = expression.replace("√", "math.sqrt")
             expression = expression.replace("sin", "math.sin")
             expression = expression.replace("cos", "math.cos")
             expression = expression.replace("tan", "math.tan")
@@ -42,12 +42,9 @@ class calculator:
         equation.set("")
 
     def radian(self, equation):
-        try:
             angle = float(equation.get())
             radian = math.radians(angle)
             return equation.set(str(radian))
-        except ValueError:
-            equation.set("Invalid input. Please enter a numeric value for the angle.")
 
     def switch_mode(self, gui):
         if self.mode == 0:
